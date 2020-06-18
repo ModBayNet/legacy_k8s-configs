@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: edgedb
 spec:
+  clusterIP: "None"
   selector:
     app: edgedb-bd
   ports:
@@ -28,7 +29,7 @@ spec:
     spec:
       containers:
       - name: edgedb
-        image: edgedb/edgedb:nightly
+        image: edgedb/edgedb:1-alpha3
         imagePullPolicy: Always
         volumeMounts:
           - name: edgedb
