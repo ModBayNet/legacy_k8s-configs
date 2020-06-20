@@ -3,6 +3,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: modbay-web-backend
+  labels:
+    type: web
+    area: backend
 spec:
   type: NodePort
   sessionAffinity: ClientIP
