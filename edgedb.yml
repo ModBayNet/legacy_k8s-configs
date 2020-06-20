@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: edgedb
-        image: edgedb/edgedb:1-alpha3
+        image: edgedb/edgedb:202006200336058d78f4
         imagePullPolicy: Always
         volumeMounts:
           - name: edgedb
