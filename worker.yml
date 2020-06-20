@@ -5,6 +5,7 @@ metadata:
   name: modbay-web-backend
 spec:
   type: NodePort
+  sessionAffinity: ClientIP
   selector:
     app: modbay-worker
     type: web
