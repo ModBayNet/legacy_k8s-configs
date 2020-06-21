@@ -3526,6 +3526,10 @@ spec:
         - name: calico-node
           image: calico/node:v3.15.0
           env:
+            - name: IP_AUTODETECTION_METHOD
+              value: can-reach=www.google.com
+            - name: IP6_AUTODETECTION_METHOD
+              value: can-reach=www.google.com
             # Use Kubernetes API as the backing datastore.
             - name: DATASTORE_TYPE
               value: "kubernetes"
