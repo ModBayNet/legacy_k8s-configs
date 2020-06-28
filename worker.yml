@@ -29,6 +29,7 @@ metadata:
     area: backend
 spec:
   replicas: 2
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       app: modbay-worker
@@ -44,76 +45,76 @@ spec:
       imagePullSecrets:
         - name: modbay-gitlab-registry-credentials
       containers:
-      - name: worker
-        limits:
-        image: registry.gitlab.com/modbay1/worker
-        imagePullPolicy: Always
-        env:
-        # generic
-        - name: MODBAY_WORKER_JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: modbay-worker-generic
-              key: jwt_secret
-        # redis
-        - name: MODBAY_REDIS_HOST
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: host
-        - name: MODBAY_REDIS_PORT
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: port
-        - name: MODBAY_REDIS_DB
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: db
-        - name: MODBAY_REDIS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: password
-        # edgedb
-        - name: MODBAY_EDGEDB_HOST
-          value: edgedb # edgedb.default.svc.k8s.modbay.net.
-        - name: MODBAY_EDGEDB_PORT
-          value: "5656" # _binary._tcp.edgedb.default.svc.k8s.modbay.net.
-        - name: MODBAY_EDGEDB_USER
-          valueFrom:
-            secretKeyRef:
-              name: edgedb-credentials
-              key: user
-        - name: MODBAY_EDGEDB_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: edgedb-credentials
-              key: database
-        - name: MODBAY_EDGEDB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: edgedb-credentials
-              key: password
-        - name: MODBAY_SENTRY_DSN
-          valueFrom:
-            secretKeyRef:
-              name: modbay-worker-sentry-credentials
-              key: dsn
-        volumeMounts:
-          - name: config
-            mountPath: /code/config.yaml
-            # prevent directory override
-            subPath: config.yaml
-        ports:
-        - name: http
-          containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /healthcheck
-            port: 8080
-          initialDelaySeconds: 30
+        - name: worker
+          limits:
+          image: registry.gitlab.com/modbay1/web-worker
+          imagePullPolicy: Always
+          env:
+            # generic
+            - name: MODBAY_WORKER_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: modbay-worker-generic
+                  key: jwt_secret
+            # redis
+            - name: MODBAY_REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: host
+            - name: MODBAY_REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: port
+            - name: MODBAY_REDIS_DB
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: db
+            - name: MODBAY_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: password
+            # edgedb
+            - name: MODBAY_EDGEDB_HOST
+              value: edgedb # edgedb.default.svc.k8s.modbay.net.
+            - name: MODBAY_EDGEDB_PORT
+              value: "5656" # _binary._tcp.edgedb.default.svc.k8s.modbay.net.
+            - name: MODBAY_EDGEDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: edgedb-credentials
+                  key: user
+            - name: MODBAY_EDGEDB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: edgedb-credentials
+                  key: database
+            - name: MODBAY_EDGEDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: edgedb-credentials
+                  key: password
+            - name: MODBAY_SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: modbay-worker-sentry-credentials
+                  key: dsn
+          volumeMounts:
+            - name: config
+              mountPath: /code/config.yaml
+              # prevent directory override
+              subPath: config.yaml
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 40
       volumes:
         - name: config
           configMap:
