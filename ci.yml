@@ -14,18 +14,23 @@ rules:
   - apiGroups:
       - ""
       - "apps"
+      - "batch"
     resources:
       # - "pods/portforward"
+      - "jobs"
       - "pods"
       - "secrets"
       - "configmaps"
       - "services"
       - "statefulsets"
+      - "deployments"
     verbs:
       - "get"
+      - "update"
       - "create"
       - "delete"
       - "list"
+      - "watch"
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
