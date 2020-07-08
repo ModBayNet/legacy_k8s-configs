@@ -39,15 +39,15 @@ spec:
         area: backend
     spec:
       containers:
-      - name: edgedb
-        image: edgedb/edgedb:202006200336058d78f4
-        imagePullPolicy: Always
-        volumeMounts:
-          - name: edgedb
-            mountPath: /var/lib/edgedb/data
-        ports:
-        - name: binary
-          containerPort: 5656
+        - name: edgedb
+          image: edgedb/edgedb:202006200336058d78f4
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: edgedb
+              mountPath: /var/lib/edgedb/data
+          ports:
+            - name: binary
+              containerPort: 5656
       volumes:
         - name: edgedb
           persistentVolumeClaim:
@@ -70,11 +70,11 @@ spec:
   nodeAffinity:
     required:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: type
-          operator: In
-          values:
-            - modbay
+        - matchExpressions:
+            - key: type
+              operator: In
+              values:
+                - modbay
 
 ---
 apiVersion: v1
