@@ -61,21 +61,21 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: modbay-redis-data
+            claimName: redis-data
         - name: config
           configMap:
-            name: modbay-redis-config
+            name: redis-config
             items:
-              - key: redis-config
+              - key: redis.conf
                 path: redis.conf
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: modbay-redis-data
+  name: redis-data
 spec:
-  storageClassName: modbay-redis-data
+  storageClassName: redis-data
   accessModes:
     - ReadWriteOnce
   resources:
@@ -86,14 +86,14 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: modbay-redis-data
+  name: redis-data
 spec:
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: modbay-redis-data
+  storageClassName: redis-data
   local:
     path: /home/modbay/redis
   nodeAffinity:
@@ -109,9 +109,9 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: modbay-redis-config
+  name: redis-config
 data:
-  redis-config: |
+  redis.conf: |
     save 900 1
     save 300 10
     save 60 10000

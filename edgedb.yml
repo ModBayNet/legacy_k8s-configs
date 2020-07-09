@@ -9,7 +9,7 @@ metadata:
 spec:
   clusterIP: "None"
   selector:
-    app: edgedb-bd
+    app: edgedb
   ports:
     - name: binary
       port: 5656
@@ -28,13 +28,13 @@ spec:
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: edgedb-bd
+      app: edgedb
       type: database
       area: backend
   template:
     metadata:
       labels:
-        app: edgedb-bd
+        app: edgedb
         type: database
         area: backend
     spec:
@@ -43,28 +43,28 @@ spec:
           image: edgedb/edgedb:202006200336058d78f4
           imagePullPolicy: Always
           volumeMounts:
-            - name: edgedb
+            - name: data
               mountPath: /var/lib/edgedb/data
           ports:
             - name: binary
               containerPort: 5656
       volumes:
-        - name: edgedb
+        - name: data
           persistentVolumeClaim:
-            claimName: modbay-edgedb-claim
+            claimName: edgedb-data
 
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: modbay-edgedb
+  name: edgedb-data
 spec:
   capacity:
     storage: 50Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: modbay-edgedb-storage
+  storageClassName: edgedb-data
   local:
     path: /home/modbay/edb
   nodeAffinity:
@@ -80,9 +80,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: modbay-edgedb-claim
+  name: edgedb-data
 spec:
-  storageClassName: modbay-edgedb-storage
+  storageClassName: edgedb-data
   accessModes:
     - ReadWriteOnce
   resources:
