@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: edgedb
-          image: edgedb/edgedb:202006200336058d78f4
+          image: edgedb/edgedb:2020080601441383e9f5
           imagePullPolicy: Always
           volumeMounts:
             - name: data
